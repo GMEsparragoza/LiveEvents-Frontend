@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     return (
-        <AuthContext.Provider value={{ user: data?.user, isLoading, error, refetch }}>
+        <AuthContext.Provider value={{ user: data?.user || '', isLoading, error, refetch }}>
             {children}
         </AuthContext.Provider>
     );

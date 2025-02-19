@@ -9,11 +9,27 @@ import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
     useSEO({ title: "Login" });
-    const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = useState(false);
     const [status, setStatus] = useState({ loading: false, error: null })
+    const [resetPassword, setResetPassword] = useState(false);
     const navigate = useNavigate();
     const { refetch } = useAuth();
+
+    // Instancia para el formulario de Login
+    const {
+        register: loginRegister,
+        handleSubmit: handleLoginSubmit,
+        reset: resetLogin,
+        formState: { errors: loginErrors },
+    } = useForm();
+
+    // Instancia para el formulario de Reseteo de Contraseña
+    const {
+        register: resetRegister,
+        handleSubmit: handleResetSubmit,
+        reset: resetReset,
+        formState: { errors: resetErrors },
+    } = useForm();
 
     const onSubmit = async (data) => {
         setStatus({ loading: true, error: null });
@@ -38,17 +54,36 @@ const Login = () => {
         }
     };
 
+    const handleResetPassword = async (data) => {
+        setStatus({ loading: true, error: null });
+        try {
+            const response = await api.post('/auth/reset-password', {
+                email: data.resetEmail
+            })
+            toast.info(response.data.message, {
+                className: "font-semibold",
+            })
+            setStatus({ loading: false, error: null });
+            setResetPassword(false);
+        } catch (error) {
+            setStatus({ loading: false, error: error.response?.data.message || error.message });
+            toast.error("An error occurred while resetting your password, please try again.", {
+                className: "font-semibold text-error",
+            })
+        }
+    }
+
     return (
         <div className="flex justify-center items-center min-h-screen">
-            <div className="bg-background-secondary p-8 rounded-lg shadow-lg w-96">
+            <div className="bg-background-secondary p-8 rounded-lg shadow-xl w-96">
                 <h2 className="text-3xl text-primary font-bold text-center">Sign In</h2>
-                <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
+                <form key="login" onSubmit={handleLoginSubmit(onSubmit)} className="mt-6">
                     <div className="mb-4">
                         <label className="block text-text mb-1 required">E-mail</label>
                         <input
                             type="email"
                             placeholder="user123@gmail.com"
-                            {...register("email", {
+                            {...loginRegister("email", {
                                 required: "E-mail is required",
                                 pattern: {
                                     value: /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
@@ -57,36 +92,51 @@ const Login = () => {
                             })}
                             className="w-full p-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
                         />
-                        {errors.email && <p className="text-error text-xs mt-1">{errors.email.message}</p>}
+                        {loginErrors.email && <p className="text-error text-xs mt-1">{loginErrors.email.message}</p>}
                     </div>
-                    <div className="mb-4 relative">
-                        <label className="block text-text mb-1 required">Password</label>
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="********"
-                            {...register("password", {
-                                required: "Password is required",
-                                minLength: {
-                                    value: 6,
-                                    message: "Must be at least 6 characters"
-                                },
-                                maxLength: {
-                                    value: 20,
-                                    message: "Must not exceed 20 characters"
-                                },
-                                pattern: {
-                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[._-]).{6,20}$/,
-                                    message: 'The password must contain lowercase, uppercase and a special character'
-                                }
-                            })}
-                            className="w-full p-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                        />
-                        <i className={`${showPassword ? 'bx bx-show' : 'bx bx-hide'} absolute right-3 top-13 -translate-y-1/2 cursor-pointer text-text text-xl font-semibold`}
-                            onClick={() => setShowPassword(!showPassword)}></i>
-                        {errors.password && <p className="text-error text-xs mt-1">{errors.password.message}</p>}
+                    <div>
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="block text-text required">Password</label>
+                            <div>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setResetPassword(true);
+                                        resetLogin();
+                                        setStatus({ loading: false, error: null });
+                                    }}
+                                    className="text-primary hover:underline cursor-pointer"
+                                >Forgot Password?</button>
+                            </div>
+                        </div>
+                        <div className="mb-4 relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="********"
+                                {...loginRegister("password", {
+                                    required: "Password is required",
+                                    minLength: {
+                                        value: 6,
+                                        message: "Must be at least 6 characters"
+                                    },
+                                    maxLength: {
+                                        value: 20,
+                                        message: "Must not exceed 20 characters"
+                                    },
+                                    pattern: {
+                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[._-]).{6,20}$/,
+                                        message: 'The password must contain lowercase, uppercase and a special character'
+                                    }
+                                })}
+                                className="w-full p-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                            />
+                            <i className={`${showPassword ? 'bx bx-show' : 'bx bx-hide'} absolute right-3 top-6 -translate-y-1/2 cursor-pointer text-text text-xl font-semibold`}
+                                onClick={() => setShowPassword(!showPassword)}></i>
+                            {loginErrors.password && <p className="text-error text-xs mt-1">{loginErrors.password.message}</p>}
+                        </div>
                     </div>
                     {status.error && <p className="text-error text-md text-center my-2">{status.error}</p>}
-                    <button type="submit" disabled={status.loading} className="w-full bg-primary text-white p-3 rounded-lg hover:bg-secondary transition-all cursor-pointer">
+                    <button type="submit" disabled={status.loading} className="w-full bg-primary text-white p-3 rounded-lg hover:bg-secondary transition-all cursor-pointer duration-300">
                         {status.loading ? <i className="bx bx-loader bx-spin"></i> : "Sign In"}
                     </button>
                 </form>
@@ -94,6 +144,46 @@ const Login = () => {
                     Dont have an account? <Link to="/register" className="text-primary hover:underline">Sign up</Link>
                 </p>
             </div>
+            {resetPassword && (
+                <div className="fixed inset-0 bg-background-dark/50 flex items-center justify-center z-30">
+                    <div className="bg-background-secondary p-8 rounded-lg shadow-lg w-96">
+                        <h2 className="text-2xl text-center text-primary">Reset Password</h2>
+                        <form key='reset' onSubmit={handleResetSubmit(handleResetPassword)} className="mt-4">
+                            <div className="mb-4">
+                                <label className="block text-text mb-1 required">E-mail</label>
+                                <input
+                                    type="email"
+                                    placeholder="user123@gmail.com"
+                                    {...resetRegister('resetEmail', {
+                                        required: "E-mail is required",
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                                            message: "The email is not valid"
+                                        }
+                                    })}
+                                    className="w-full p-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                                {resetErrors.resetEmail && <p className="text-error text-xs mt-1">{resetErrors.resetEmail.message}</p>}
+                            </div>
+                            {status.error && <p className="text-error text-md text-center my-2">{status.error}</p>}
+                            <div className="flex justify-between items-center space-x-2">
+                                <button
+                                    type="button"
+                                    className="w-full py-2 cursor-pointer border border-border rounded-md hover:border-primary hover:text-primary transition duration-300"
+                                    onClick={() => {
+                                        setResetPassword(false);
+                                        resetReset();
+                                        setStatus({ loading: false, error: null });
+                                    }}
+                                >Cancel</button>
+                                <button type="submit" disabled={status.loading} className="w-full bg-primary text-white p-3 rounded-lg hover:bg-secondary transition-all cursor-pointer duration-300">
+                                    {status.loading ? <i className="bx bx-loader bx-spin"></i> : "Reset Password"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

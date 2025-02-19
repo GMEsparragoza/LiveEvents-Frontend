@@ -21,7 +21,7 @@ function App() {
             pauseOnFocusLoss={false}
             draggable
             pauseOnHover={false}
-            bodyClassName="text-xl"
+            bodyClassName="text-xl z-60"
           />
           <AppRoutes />
         </Router>

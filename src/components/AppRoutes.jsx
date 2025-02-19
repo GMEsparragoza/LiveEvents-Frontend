@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 
 import { ProtectedRoutes } from './ProtectedRoutes'
 import { PublicRoutes } from './PublicRoutes'
+import { ResetRoutes } from './ResetRoutes'
 
 import Home from '../pages/Home'
 import Events from '../pages/Events'
@@ -9,6 +10,7 @@ import NotFound from '../pages/NotFound'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Profile from '../pages/Profile'
+import ResetPassword from '../pages/ResetPassword'
 
 const AppRoutes = () => {
     return (
@@ -23,6 +25,10 @@ const AppRoutes = () => {
 
             <Route element={<ProtectedRoutes />}>
                 <Route path='/profile' element={<Profile />} />
+            </Route>
+
+            <Route element={<ResetRoutes />}>
+                <Route path='/reset-password' element={<ResetPassword />} />
             </Route>
 
             <Route path='*' element={<NotFound />} />
