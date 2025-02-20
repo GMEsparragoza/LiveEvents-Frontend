@@ -6,6 +6,7 @@ import api from "../services/Fetch";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
     useSEO({ title: "Login" });
@@ -73,11 +74,39 @@ const Login = () => {
         }
     }
 
+    const handleSuccess = async (response) => {
+        const idToken = response.credential;
+
+        try {
+            const response = await api.post('/auth/google', {
+                idToken
+            }, { withCredentials: true });
+
+            toast.success(`${response.data.message}! Redirecting to Profile`, {
+                className: "font-semibold",
+            })
+            setStatus({ loading: false, error: null })
+            refetch();
+            setTimeout(() => {
+                navigate('/profile')
+            }, 1000);
+        } catch (error) {
+            setStatus({ loading: false, error: error.response.data.message || error.message })
+            toast.error("An error occurred while logging in, please try again.", {
+                className: "font-semibold",
+            })
+        }
+    }
+
+    const handleError = (err) => {
+        setStatus({ loading: false, error: err.message || 'Error verifying session' })
+    };
+
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className="bg-background-secondary p-8 rounded-lg shadow-xl w-96">
                 <h2 className="text-3xl text-primary font-bold text-center">Sign In</h2>
-                <form key="login" onSubmit={handleLoginSubmit(onSubmit)} className="mt-6">
+                <form key="login" onSubmit={handleLoginSubmit(onSubmit)} className="mt-6 flex flex-col">
                     <div className="mb-4">
                         <label className="block text-text mb-1 required">E-mail</label>
                         <input
@@ -109,7 +138,7 @@ const Login = () => {
                                 >Forgot Password?</button>
                             </div>
                         </div>
-                        <div className="mb-4 relative">
+                        <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="********"
@@ -135,7 +164,13 @@ const Login = () => {
                             {loginErrors.password && <p className="text-error text-xs mt-1">{loginErrors.password.message}</p>}
                         </div>
                     </div>
-                    {status.error && <p className="text-error text-md text-center my-2">{status.error}</p>}
+                    <div className="my-4 mx-auto">
+                        <GoogleLogin
+                            onSuccess={handleSuccess}
+                            onError={handleError}
+                        />
+                    </div>
+                    {status.error && <p className="text-error text-md text-center mb-2">{status.error}</p>}
                     <button type="submit" disabled={status.loading} className="w-full bg-primary text-white p-3 rounded-lg hover:bg-secondary transition-all cursor-pointer duration-300">
                         {status.loading ? <i className="bx bx-loader bx-spin"></i> : "Sign In"}
                     </button>

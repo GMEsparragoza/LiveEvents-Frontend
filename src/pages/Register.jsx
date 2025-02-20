@@ -3,7 +3,9 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useSEO } from "../hooks/useSEO";
 import api from "../services/Fetch";
+import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
     useSEO({ title: "Register" });
@@ -11,6 +13,7 @@ const Register = () => {
     const [status, setStatus] = useState({ loading: false, error: null });
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const { refetch } = useAuth();
 
     const onSubmit = async (data) => {
         setStatus({ loading: true, error: null })
@@ -35,12 +38,40 @@ const Register = () => {
         }
     };
 
+    const handleSuccess = async (response) => {
+        const idToken = response.credential;
+
+        try {
+            const response = await api.post('/auth/google', {
+                idToken
+            }, { withCredentials: true });
+
+            toast.success(`${response.data.message}! Redirecting to Profile`, {
+                className: "font-semibold",
+            })
+            setStatus({ loading: false, error: null })
+            refetch();
+            setTimeout(() => {
+                navigate('/profile')
+            }, 1000);
+        } catch (error) {
+            setStatus({ loading: false, error: error.response.data.message || error.message })
+            toast.error("An error occurred while logging in, please try again.", {
+                className: "font-semibold",
+            })
+        }
+    }
+
+    const handleError = (err) => {
+        setStatus({ loading: false, error: err.message || 'Error verifying session' })
+    };
+
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className="bg-background-secondary p-8 rounded-lg shadow-lg w-96">
                 <h2 className="text-3xl text-primary font-bold text-center">Sign Up</h2>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col">
                     <div className="mb-4">
                         <label className="block text-text mb-1 required">Username</label>
                         <input
@@ -73,7 +104,7 @@ const Register = () => {
                         {errors.email && <p className="text-error text-xs mt-1">{errors.email.message}</p>}
                     </div>
 
-                    <div className="mb-4 relative">
+                    <div className="relative">
                         <label className="block text-text mb-1 required">Password</label>
                         <input
                             type={showPassword ? "text" : "password"}
@@ -99,8 +130,13 @@ const Register = () => {
                             onClick={() => setShowPassword(!showPassword)}></i>
                         {errors.password && <p className="text-error text-xs mt-1">{errors.password.message}</p>}
                     </div>
-                    {status.error && <p className="text-error text-md text-center my-2">{status.error}</p>}
-
+                    <div className="my-4 mx-auto">
+                        <GoogleLogin
+                            onSuccess={handleSuccess}
+                            onError={handleError}
+                        />
+                    </div>
+                    {status.error && <p className="text-error text-md text-center mb-2">{status.error}</p>}
                     <button type="submit" disabled={status.loading} className="w-full bg-primary text-white p-3 rounded-lg hover:bg-secondary transition-all cursor-pointer">
                         {status.loading ? <i className="bx bx-loader bx-spin"></i> : 'Register'}
                     </button>
