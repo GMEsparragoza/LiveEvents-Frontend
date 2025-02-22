@@ -6,7 +6,6 @@ import { useAuth } from "../context/AuthContext";
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { user } = useAuth();
-    console.log(user);
 
     // Función para alternar el menú
     const toggleMenu = () => setMenuOpen(!menuOpen);

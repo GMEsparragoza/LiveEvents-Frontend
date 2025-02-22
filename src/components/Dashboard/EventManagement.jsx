@@ -12,11 +12,19 @@ const EventManagement = () => {
     const [createEvent, setCreateEvent] = useState(false)
     const [eventImage, setEventImage] = useState(null)
     const { register, formState: { errors }, handleSubmit, reset } = useForm();
+    const [bannerImage, setBannerImage] = useState(null)
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: 'image/*',
         maxFiles: 1,
         onDrop: (acceptedFiles) => {
             setEventImage(acceptedFiles[0])
+        }
+    });
+    const { getRootProps: getRootBannerProps, getInputProps: getInputBannerProps, isDragActive: isDragBannerActive } = useDropzone({
+        accept: 'image/*',
+        maxFiles: 1,
+        onDrop: (acceptedFiles) => {
+            setBannerImage(acceptedFiles[0])
         }
     });
     const [events, setEvents] = useState([])
@@ -44,11 +52,13 @@ const EventManagement = () => {
 
             const formData = new FormData();
             formData.append('image', eventImage)
+            formData.append('banner', bannerImage)
             const eventData = {
                 tittle: data.tittle,
                 description: data.description,
                 date: dateObject,
-                location: data.location
+                location: data.location,
+                price: data.price
             }
             formData.append('eventData', JSON.stringify(eventData))
 
@@ -57,11 +67,13 @@ const EventManagement = () => {
             })
             setStatus({ loading: false, error: null })
             setEventImage(null)
+            setBannerImage(null)
             reset()
             setEvents([...events, response.data.event])
-            toast.success(`${response.data.message}!`,{
+            toast.success(`${response.data.message}!`, {
                 className: 'font-semibold'
             })
+            setCreateEvent(false)
         } catch (error) {
             setStatus({ loading: false, error: error.response?.data.message || error.message })
         }
@@ -164,18 +176,36 @@ const EventManagement = () => {
                             className="p-2 rounded-md bg-background-secondary border border-border text-text"
                         />
                         {errors.location && <p className='text-error font-medium text-center'>{errors.location.message}</p>}
+                        <input
+                            type="number"
+                            placeholder="Price"
+                            {...register('price')}
+                            className="p-2 rounded-md bg-background-secondary border border-border text-text"
+                        />
                         <div
                             {...getRootProps()}
                             className="mt-2 w-full rounded-md bg-background-secondary px-3 py-6 text-text border-2 border-dashed border-border focus:outline-2 focus:outline-accent transition duration-300 hover:border-primary cursor-pointer"
                         >
                             <input {...getInputProps()} />
                             {isDragActive ? (
-                                <p className="text-center text-sm">Drop the image here...</p>
+                                <p className="text-center text-sm">Drop the main image here...</p>
                             ) : (
-                                <p className="text-center text-sm">Drag & drop an image, or click to select</p>
+                                <p className="text-center text-sm">Drag & drop an main image, or click to select</p>
                             )}
                         </div>
                         {eventImage && <p className='text-text text-lg text-center'>Featured image: {eventImage.name}</p>}
+                        <div
+                            {...getRootBannerProps()}
+                            className="mt-2 w-full rounded-md bg-background-secondary px-3 py-6 text-text border-2 border-dashed border-border focus:outline-2 focus:outline-accent transition duration-300 hover:border-primary cursor-pointer"
+                        >
+                            <input {...getInputBannerProps()} />
+                            {isDragBannerActive ? (
+                                <p className="text-center text-sm">Drop the banner image here...</p>
+                            ) : (
+                                <p className="text-center text-sm">Drag & drop an banner image, or click to select</p>
+                            )}
+                        </div>
+                        {bannerImage && <p className='text-text text-lg text-center'>Featured banner image: {bannerImage.name}</p>}
                         <div className='flex'>
                             <button type="button" onClick={() => {
                                 setEventImage(null)
