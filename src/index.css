@@ -17,22 +17,64 @@
 
 
 @theme {
-  --color-primary: #4F46E5; /* Indigo 600 */
-  --color-secondary: #9333EA; /* Purple 600 */
-  --color-accent: #22C55E; /* Green 500 */
-  --color-background: #F3F4F6; /* Gray 100 */
-  --color-background-secondary: #E5E7EB; /* Gray 200 */
-  --color-background-dark: #1F2937; /* Gray 800 */
-  --color-text: #111827; /* Gray 900 */
-  --color-text-secondary: #374151; /* Gray 700 */
-  --color-border: #D1D5DB; /* Gray 300 */
-  --color-success: #0d9940; /* Green 600 */
-  --color-error: #d71b1b; /* Red 600 */
-  --color-warning: #F59E0B; /* Amber 500 */
-  --color-info: #3B82F6; /* Blue 500 */
-  --color-decoration-red: #e25f5f; /* Red 400 */
-  --color-decoration-green: #5fe25f; /* Green 400 */
-  --color-decoration-blue: #5f5fe2; /* Blue 400 */
+  --color-primary: #4F46E5;
+  /* Indigo 600 */
+  --color-secondary: #9333EA;
+  /* Purple 600 */
+  --color-accent: #22C55E;
+  /* Green 500 */
+  --color-background: #F3F4F6;
+  /* Gray 100 */
+  --color-background-secondary: #E5E7EB;
+  /* Gray 200 */
+  --color-background-dark: #1F2937;
+  /* Gray 800 */
+  --color-text: #111827;
+  /* Gray 900 */
+  --color-text-secondary: #374151;
+  /* Gray 700 */
+  --color-border: #D1D5DB;
+  /* Gray 300 */
+  --color-success: #0d9940;
+  /* Green 600 */
+  --color-error: #d71b1b;
+  /* Red 600 */
+  --color-warning: #F59E0B;
+  /* Amber 500 */
+  --color-info: #3B82F6;
+  /* Blue 500 */
+  --color-decoration-red: #e25f5f;
+  /* Red 400 */
+  --color-decoration-green: #5fe25f;
+  /* Green 400 */
+  --color-decoration-blue: #5f5fe2;
+  /* Blue 400 */
+}
+
+.buttonPrimary {
+  cursor: pointer;
+  background-color: #4F46E5;
+  color: white;
+  border-radius: 6px;
+  transition-duration: 300ms;
+
+  &:hover {
+    background-color: #9333EA;
+  }
+}
+
+.buttonSecondary {
+  border-width: 1px;
+  border-color: #D1D5DB;
+  border-radius: 6px;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+  transition-duration: 500ms;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+  }
 }
 
 .required::after {

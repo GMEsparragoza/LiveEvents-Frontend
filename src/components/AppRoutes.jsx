@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { ProtectedRoutes } from './ProtectedRoutes'
 import { PublicRoutes } from './PublicRoutes'
 import { ResetRoutes } from './ResetRoutes'
+import { AdminRoutes } from './AdminRoutes'
 
 import Home from '../pages/Home'
 import Events from '../pages/Events'
@@ -11,6 +12,7 @@ import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Profile from '../pages/Profile'
 import ResetPassword from '../pages/ResetPassword'
+import Dashboard from '../pages/Dashboard'
 
 const AppRoutes = () => {
     return (
@@ -29,6 +31,10 @@ const AppRoutes = () => {
 
             <Route element={<ResetRoutes />}>
                 <Route path='/reset-password' element={<ResetPassword />} />
+            </Route>
+
+            <Route element={<AdminRoutes />}>
+                <Route path='/admin/dashboard' element={<Dashboard />} />
             </Route>
 
             <Route path='*' element={<NotFound />} />

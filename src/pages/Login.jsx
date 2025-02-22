@@ -171,7 +171,7 @@ const Login = () => {
                         />
                     </div>
                     {status.error && <p className="text-error text-md text-center mb-2">{status.error}</p>}
-                    <button type="submit" disabled={status.loading} className="w-full bg-primary text-white p-3 rounded-lg hover:bg-secondary transition-all cursor-pointer duration-300">
+                    <button type="submit" disabled={status.loading} className="w-full buttonPrimary p-3">
                         {status.loading ? <i className="bx bx-loader bx-spin"></i> : "Sign In"}
                     </button>
                 </form>
@@ -204,14 +204,14 @@ const Login = () => {
                             <div className="flex justify-between items-center space-x-2">
                                 <button
                                     type="button"
-                                    className="w-full py-2 cursor-pointer border border-border rounded-md hover:border-primary hover:text-primary transition duration-300"
+                                    className="w-full py-2 buttonSecondary"
                                     onClick={() => {
                                         setResetPassword(false);
                                         resetReset();
                                         setStatus({ loading: false, error: null });
                                     }}
                                 >Cancel</button>
-                                <button type="submit" disabled={status.loading} className="w-full bg-primary text-white p-3 rounded-lg hover:bg-secondary transition-all cursor-pointer duration-300">
+                                <button type="submit" disabled={status.loading} className="w-full py-2 buttonPrimary">
                                     {status.loading ? <i className="bx bx-loader bx-spin"></i> : "Reset Password"}
                                 </button>
                             </div>

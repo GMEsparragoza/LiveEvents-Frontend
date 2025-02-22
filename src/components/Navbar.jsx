@@ -6,6 +6,8 @@ import { useAuth } from "../context/AuthContext";
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { user } = useAuth();
+    console.log(user);
+
     // Función para alternar el menú
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -38,16 +40,21 @@ export const Navbar = () => {
 
                 {/* Botones Desktop */}
                 <div className="hidden md:flex space-x-4">
+                    {user?.role === 'admin' ? (
+                        <Link to="/admin/dashboard" onClick={toggleMenu} className="px-6 py-2 buttonSecondary">
+                            Dashboard
+                        </Link>
+                    ) : ('')}
                     {user ? (
-                        <Link to="/profile" className="px-6 py-2 border border-border rounded-md hover:border-primary hover:text-primary transition duration-300">
+                        <Link to="/profile" className={`px-6 py-2 ${user?.role === 'admin' ? 'buttonPrimary' : 'buttonSecondary'}`}>
                             Profile
                         </Link>
                     ) : (
                         <>
-                            <Link to="/login" className="px-6 py-2 border border-border rounded-md hover:border-primary hover:text-primary transition duration-300">
+                            <Link to="/login" className="px-6 py-2 buttonSecondary">
                                 Sign In
                             </Link>
-                            <Link to="/register" className="px-6 py-2 bg-primary text-white rounded-md hover:bg-secondary transition duration-300">
+                            <Link to="/register" className="px-6 py-2 buttonPrimary">
                                 Sign Up
                             </Link>
                         </>
@@ -83,16 +90,21 @@ export const Navbar = () => {
                 </Link>
 
                 <div className="flex space-x-4">
+                    {user?.role === 'admin' ? (
+                        <Link to="/admin/dashboard" onClick={toggleMenu} className="px-6 py-2 buttonSecondary">
+                            Dashboard
+                        </Link>
+                    ) : ('')}
                     {user ? (
-                        <Link to="/profile" onClick={toggleMenu} className="px-6 py-2 border border-border rounded-md hover:border-primary hover:text-primary transition duration-300">
+                        <Link to="/profile" onClick={toggleMenu} className={`px-6 py-2 ${user?.role === 'admin' ? 'buttonPrimary' : 'buttonSecondary'}`}>
                             Profile
                         </Link>
                     ) : (
                         <>
-                            <Link to="/login" onClick={toggleMenu} className="px-6 py-2 border border-border rounded-md hover:border-primary hover:text-primary transition duration-300">
+                            <Link to="/login" onClick={toggleMenu} className="px-6 py-2 buttonSecondary">
                                 Sign In
                             </Link>
-                            <Link to="/register" onClick={toggleMenu} className="px-6 py-2 bg-primary text-white rounded-md hover:bg-secondary transition duration-300">
+                            <Link to="/register" onClick={toggleMenu} className="px-6 py-2 buttonPrimary">
                                 Sign Up
                             </Link>
                         </>
