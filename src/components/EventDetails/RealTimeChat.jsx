@@ -3,7 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 
 // Configuración de la conexión al servidor de socket.io
-const socket = io('http://localhost:3000');
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+    secure: true,
+    withCredentials: true,
+    transports: ['websocket', 'polling']
+});
 
 const RealTimeChat = ({ user, event }) => {
     const [messages, setMessages] = useState([]);
