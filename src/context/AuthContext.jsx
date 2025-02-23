@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react/prop-types */
 import { useContext, createContext } from "react";
 import api from "../services/Fetch";
 import { useQuery } from "@tanstack/react-query";
@@ -9,8 +11,8 @@ const fetchUserData = async () => {
         const { data } = await api.get("/auth/profile");
         return data;
     } catch (error) {
-        console.error("Error al obtener los datos del usuario:", error);
-        throw error; // Importante para que React Query maneje el error correctamente
+        console.error("Error getting user data:", error);
+        throw error;
     }
 };
 

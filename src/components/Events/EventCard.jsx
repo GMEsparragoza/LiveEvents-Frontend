@@ -22,7 +22,7 @@ const EventCard = ({ event }) => {
                     {event.description}
                 </p>
                 <p className="text-sm text-text mb-4 flex-grow">
-                    Entrance: ${event?.price ? event.price : 'FREE'}
+                    Entrance: ${event?.price || 'FREE'}
                 </p>
                 <button className="buttonPrimary px-4 py-2 text-sm self-end">
                     View Details

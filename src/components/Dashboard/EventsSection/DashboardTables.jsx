@@ -232,6 +232,7 @@ export const DashboardUsers = ({ data, actions, setUsers, users }) => {
                         <div className='my-2 py-2'>
                             <p className='text-sm text-text-secondary'><strong>Email:</strong> {data.email}</p>
                             <p className='text-sm text-text-secondary'><strong>Username:</strong> {data.username}</p>
+                            <p className='text-sm text-text-secondary'><strong>Role:</strong> {data.role}</p>
                         </div>
                         <div className='flex gap-4 my-2'>
                             <button onClick={() => setDeleteUser(false)} className='w-full py-2 buttonSecondary'>Cancel</button>
