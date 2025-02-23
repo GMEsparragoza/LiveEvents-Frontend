@@ -6,6 +6,7 @@ import { Dashboardevents } from './EventsSection/DashboardTables';
 import { useSEO } from '../../hooks/useSEO'
 import { useFilterEvents } from '../../hooks/useFilterEvents';
 import { toast } from 'react-toastify';
+import { useQueryClient } from '@tanstack/react-query'
 
 const EventManagement = () => {
     useSEO({ title: 'Admin Dashboard' })
@@ -35,6 +36,7 @@ const EventManagement = () => {
         tertiary: 'Delete'
     }
     const [status, setStatus] = useState({ loading: false, error: null })
+    const queryClient = useQueryClient();
 
     const onCreateEvent = async (data) => {
         setStatus({ loading: true, error: null })
@@ -65,6 +67,7 @@ const EventManagement = () => {
             const response = await api.post('/admin/event', formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             })
+            queryClient.invalidateQueries(['Messages']);
             setStatus({ loading: false, error: null })
             setEventImage(null)
             setBannerImage(null)

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import api from '../../../services/Fetch'
 import { useForm } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const Dashboardevents = ({ data, actions, setEvents, events }) => {
     const [deleteEvent, setDeleteEvent] = useState(false)
@@ -17,6 +18,7 @@ export const Dashboardevents = ({ data, actions, setEvents, events }) => {
     const [eventID, setEventID] = useState(null)
     const [error, setError] = useState(null)
     const { register, handleSubmit, reset } = useForm()
+    const queryClient = useQueryClient()
 
     const handleDeleteEvent = async (_id) => {
         try {
@@ -25,6 +27,7 @@ export const Dashboardevents = ({ data, actions, setEvents, events }) => {
                 className: 'font-semibold'
             })
             setDeleteEvent(false)
+            queryClient.invalidateQueries(['Messages']);
             setEvents(events.filter(user => user._id !== _id))
         } catch (error) {
             toast.error(`${error.response.data.message || error.message}`, {
@@ -36,22 +39,25 @@ export const Dashboardevents = ({ data, actions, setEvents, events }) => {
     const handleUpdateEvent = async (data) => {
         setError(null)
         try {
-            let formattedDate = data.date.trim();
-            if (/^\d{2}[-/]\d{2}[-/]\d{4}$/.test(formattedDate)) {
-                const [day, month, year] = formattedDate.split(/[-/]/);
-                formattedDate = `${year}-${month}-${day}`;
+            if (data.date) {
+                let formattedDate = data.date.trim();
+                if (/^\d{2}[-/]\d{2}[-/]\d{4}$/.test(formattedDate)) {
+                    const [day, month, year] = formattedDate.split(/[-/]/);
+                    formattedDate = `${year}-${month}-${day}`;
+                }
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(formattedDate)) {
+                    setError('Incorrect format for date')
+                    return;
+                }
+                data.date = new Date(formattedDate);
             }
-            if (!/^\d{4}-\d{2}-\d{2}$/.test(formattedDate)) {
-                setError('Incorrect format for date')
-                return;
-            }
-            data.date = new Date(formattedDate);
             const response = await api.put(`/admin/event/${eventID}`, {
                 data
             })
             toast.success(`${response.data.message}!`, {
                 className: 'font-semibold'
             })
+            queryClient.invalidateQueries(['Messages']);
             setUpdateEvent(false)
             reset()
             setEvents(events.map(user => user._id === response.data.event._id ? response.data.event : user));

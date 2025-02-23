@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext'
 import { useHomeEvents } from '../../hooks/useHomeEvents'
+import { Link } from 'react-router-dom';
 
 const FeaturedEvents = () => {
     const [events, setEvents] = useState([])
@@ -35,13 +36,13 @@ const FeaturedEvents = () => {
                                 </p>
                                 <p className="text-sm text-text-secondary mb-4">{event.location}</p>
                                 {!user ? (
-                                    <button className="buttonSecondary mt-auto px-4 py-2 text-sm">
+                                    <Link to={`/event/${event._id}`} className="buttonSecondary mt-auto px-4 py-2 text-sm">
                                         Learn More
-                                    </button>
+                                    </Link>
                                 ) : (
-                                    <button className="buttonPrimary mt-auto px-4 py-2 text-sm">
+                                    <Link to={`/event/${event._id}`} className="buttonPrimary px-4 py-2 text-sm self-end">
                                         View Details
-                                    </button>
+                                    </Link>
                                 )}
                             </div>
                         ))}

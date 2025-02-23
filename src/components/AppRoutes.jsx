@@ -13,12 +13,14 @@ import Register from '../pages/Register'
 import Profile from '../pages/Profile'
 import ResetPassword from '../pages/ResetPassword'
 import Dashboard from '../pages/Dashboard'
+import EventDetail from '../pages/EventDetail'
 
 const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path='/events' element={<Events />} />
+            <Route path='/event/:eventID' element={<EventDetail />} />
 
             <Route element={<PublicRoutes />}>
                 <Route path='/login' element={<Login />} />

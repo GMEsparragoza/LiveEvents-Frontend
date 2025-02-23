@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { Link } from 'react-router-dom'
 
 const EventCard = ({ event }) => {
     return (
@@ -24,9 +25,9 @@ const EventCard = ({ event }) => {
                 <p className="text-sm text-text mb-4 flex-grow">
                     Entrance: ${event?.price || 'FREE'}
                 </p>
-                <button className="buttonPrimary px-4 py-2 text-sm self-end">
+                <Link to={`/event/${event._id}`} className="buttonPrimary px-4 py-2 text-sm self-end">
                     View Details
-                </button>
+                </Link>
             </div>
         </div>
     );

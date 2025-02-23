@@ -3,8 +3,10 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import api from '../services/Fetch'
+import { useSEO } from '../hooks/useSEO'
 
 const ResetPassword = () => {
+    useSEO({ title: 'Reset Password' })
     const [status, setStatus] = useState({ loading: false, error: null })
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)

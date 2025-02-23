@@ -48,7 +48,7 @@ const DashboardOverview = () => {
                     <ul className="space-y-1">
                         {filteredNotifications?.map((message) => (
                             <li key={message?._id}>
-                                <p className={`text-sm ${message?.notification === 'warning' ? 'text-warning' : 'text-error'}`}>
+                                <p className={`text-sm ${message?.notification === 'error' ? 'text-error' : message?.notification === 'info' ? 'text-info' : 'text-warning'}`}>
                                     {message?.tittle}
                                 </p>
                             </li>

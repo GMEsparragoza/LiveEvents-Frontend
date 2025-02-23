@@ -3,8 +3,11 @@ import FeaturedEvents from '../components/Home/FeaturedEvents';
 import BenefitsFeatures from '../components/Home/BenefitsFeatures';
 import FinalCTA from '../components/Home/FinalCTA';
 import Footer from '../components/Home/Footer';
+import { useSEO } from '../hooks/useSEO';
 
 const Home = () => {
+    useSEO({ title: 'Home' })
+
     return (
         <div className="space-y-12 mt-24 mb-8 md:mx-12 mx-6">
             <HeroSection />
