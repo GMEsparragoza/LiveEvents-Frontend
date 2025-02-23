@@ -1,6 +1,10 @@
+import { useState } from 'react';
+import { useUserEvents } from '../../hooks/useUserEvents'
 
+const CreatedEvents = () => {
+    const [events, setEvents] = useState([])
+    useUserEvents({ setEvents })
 
-const CreatedEvents = ({ events, onEdit, onDelete }) => {
     return (
         <section className="mb-8">
             <h2 className="text-xl font-bold text-text mb-4">Eventos Creados</h2>
@@ -13,7 +17,7 @@ const CreatedEvents = ({ events, onEdit, onDelete }) => {
                     {events?.map((event) => (
                         <div key={event._id} className="bg-white rounded shadow overflow-hidden flex flex-col">
                             <img
-                                src={event.image}
+                                src={event.bannerURL || event.imageURL}
                                 alt={event.title}
                                 className="w-full h-40 object-cover"
                             />
@@ -25,20 +29,6 @@ const CreatedEvents = ({ events, onEdit, onDelete }) => {
                                 <p className="text-sm text-text mb-4 flex-grow">
                                     {event.description}
                                 </p>
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => onEdit(event)}
-                                        className="buttonPrimary px-3 py-1 text-sm"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => onDelete(event)}
-                                        className="buttonSecondary px-3 py-1 text-sm"
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     ))}

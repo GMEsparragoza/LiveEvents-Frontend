@@ -27,7 +27,7 @@ const NotificationsAndMessages = () => {
 
     return (
         <section className="mb-8">
-            <h2 className="text-xl font-bold text-text mb-4">Notifications and Messages</h2>
+            <h2 className="text-2xl font-bold text-text mb-4">Notifications and Messages</h2>
             <div className="bg-white p-4 rounded shadow">
                 <form onSubmit={handleNewMessage} className="mb-4">
                     <textarea

@@ -9,7 +9,7 @@ const DashboardOverview = () => {
 
     return (
         <section className="mb-8">
-            <h2 className="text-xl font-bold text-text mb-4">Control Panel</h2>
+            <h2 className="text-2xl font-bold text-text mb-4">Control Panel</h2>
             <div className={`grid grid-cols-1 ${loadingOverview || overviewError ? '' : 'md:grid-cols-3'} gap-4`}>
                 {overviewError ? (
                     <div className="p-4 bg-white rounded shadow w-1/3 mx-auto">

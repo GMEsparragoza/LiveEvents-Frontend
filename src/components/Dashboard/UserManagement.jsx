@@ -13,7 +13,7 @@ const UserManagement = () => {
 
     return (
         <section className="mb-8">
-            <h2 className="text-xl font-bold text-text mb-4">User Management</h2>
+            <h2 className="text-2xl font-bold text-text mb-4">User Management</h2>
             <div className="bg-white p-4 rounded shadow">
                 <div className="mb-4 flex justify-between items-center">
                     <input

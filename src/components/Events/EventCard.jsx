@@ -12,11 +12,11 @@ const EventCard = ({ event }) => {
                 <h2 className="text-xl font-bold text-text mb-2">{event.tittle}</h2>
                 <p className="text-sm text-text-secondary mb-2">
                     {new Date(event.date).toLocaleString('en-GB', {
-                timeZone: 'UTC',
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-            })}
+                        timeZone: 'UTC',
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                    })}
                 </p>
                 <p className="text-sm text-text mb-4 flex-grow">
                     {event.description}

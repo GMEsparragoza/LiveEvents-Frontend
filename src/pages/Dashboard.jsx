@@ -6,7 +6,7 @@ import UserManagement from "../components/Dashboard/UserManagement"
 
 const Dashboard = () => {
     return (
-        <div className="pt-20 p-4 bg-background min-h-screen">
+        <div className="mt-20 p-4 bg-background min-h-screen">
             <DashboardOverview />
             <UserManagement />
             <EventManagement />

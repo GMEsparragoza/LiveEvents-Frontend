@@ -81,7 +81,7 @@ const EventManagement = () => {
 
     return (
         <section className="mb-8">
-            <h2 className="text-xl font-bold text-text mb-4">Event Management</h2>
+            <h2 className="text-2xl font-bold text-text mb-4">Event Management</h2>
             <div className="bg-white p-4 rounded shadow">
                 <div className="flex justify-between mb-4">
                     <button onClick={() => setCreateEvent(true)} className="buttonPrimary px-4 py-2 text-sm">Create Event</button>
